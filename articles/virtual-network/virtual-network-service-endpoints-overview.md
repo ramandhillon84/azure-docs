@@ -112,7 +112,9 @@ Once service endpoints are configured to a specific service, validate that the s
   - Indicates that a more direct connection to the service is in effect, compared to any forced-tunneling routes
 
 >[!NOTE]
-> Service endpoint routes override any BGP or UDR routes for the address prefix match of an Azure service. Learn more about [troubleshooting with effective routes](diagnose-network-routing-problem.md)
+> Service endpoint routes override any BGP or UDR routes for the address prefix match of an Azure service. Learn more about [troubleshooting with effective routes](diagnose-network-routing-problem.md).
+>
+> An exception to this is Service Endpoint solution available for ADLS Gen1, which is a deviation from traditional Service Endpoint architechture and uses AAD tokens recieved over the Service Endpoint to authenticate with ADLS Gen1 accounts. However, you can implement [optimal routes for ADLS Gen1](https://docs.microsoft.com/en-us/azure/data-lake-store/data-lake-store-network-security?toc=%2fazure%2fvirtual-network%2ftoc.json#optimal-routing-with-data-lake-storage-gen1-virtual-network-integration) by following the corresponding guidance.
 
 ## Provisioning
 
