@@ -1,25 +1,21 @@
 ---
 title: Pattern syntax reference - LUIS
-titleSuffix: Azure Cognitive Services
 description: Create entities to extract key data from user utterances in Language Understanding (LUIS) apps. Extracted data is used by the client application.
-services: cognitive-services
-author: diberry
-manager: nitinme
 ms.service: cognitive-services
 ms.subservice: language-understanding
 ms.topic: reference
-ms.date: 12/09/2019
-ms.author: diberry
+ms.date: 04/14/2020
+
 ---
 
 # Pattern syntax
 
-Pattern syntax is a template for an utterance. The template should contain words and entities you want to match as well as words and punctuation you want to ignore. It is **not** a regular expression.
+Pattern syntax is a template for an utterance. The template should contain words and entities you want to match as well as words and [punctuation](luis-reference-application-settings.md#punctuation-normalization) you want to ignore. It is **not** a regular expression.
 
 > [!CAUTION]
-> Patterns only include machine-learned entity parents, not subcomponents.
+> Patterns only include machine-learning entity parents, not subentities.
 
-Entities in patterns are surrounded by curly brackets, `{}`. Patterns can include entities, and entities with roles. [Pattern.any](luis-concept-entity-types.md#patternany-entity) is an entity only used in patterns.
+Entities in patterns are surrounded by curly brackets, `{}`. Patterns can include entities, and entities with roles. [Pattern.any](concepts/entities.md#patternany-entity) is an entity only used in patterns.
 
 Pattern syntax supports the following syntax:
 
@@ -104,7 +100,7 @@ The words of the book title are not confusing to LUIS because LUIS knows where t
 
 create an [Explicit List](https://westus.dev.cognitive.microsoft.com/docs/services/5890b47c39e2bb17b84a55ff/operations/5ade550bd5b81c209ce2e5a8) through the authoring API to allow the exception when:
 
-* Your pattern contains a [Pattern.any](luis-concept-entity-types.md#patternany-entity)
+* Your pattern contains a [Pattern.any](concepts/entities.md#patternany-entity)
 * And that pattern syntax allows for the possibility of an incorrect entity extraction based on the utterance.
 
 For example, suppose you have a pattern containing both optional syntax, `[]`, and entity syntax, `{}`, combined in a way to extract data incorrectly.
@@ -137,7 +133,7 @@ Punctuation marks (`?`, `!`, `.`) should be ignored and you need to ignore them 
 Learn more about patterns:
 
 * [How to add patterns](luis-how-to-model-intent-pattern.md)
-* [How to add pattern.any entity](luis-how-to-add-entities.md#add-a-patternany-entity)
+* [How to add pattern.any entity](how-to/entities.md#create-a-patternany-entity)
 * [Patterns Concepts](luis-concept-patterns.md)
 
 Understand how [sentiment](luis-reference-prebuilt-sentiment.md) is returned in the .json response.

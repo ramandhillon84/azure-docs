@@ -2,12 +2,13 @@
 title: About Azure ExpressRoute FastPath
 description: Learn about Azure ExpressRoute FastPath to send network traffic by bypassing the gateway
 services: expressroute
-author: cherylmc
+author: duongau
 
 ms.service: expressroute
 ms.topic: conceptual
-ms.date: 12/16/2019
-ms.author: cherylmc
+ms.date: 08/10/2021
+ms.author: duau
+ms.custom: references_regions
 
 ---
 # About ExpressRoute FastPath
@@ -18,7 +19,7 @@ ExpressRoute virtual network gateway is designed to exchange network routes and 
 
 ### Circuits
 
-FastPath is available on all ExpressRoute circuits.
+FastPath is available on all ExpressRoute circuits. Public preview support for Private Link connectivity over FastPath is available for connections associated to ExpressRoute Direct circuits. Connections associated to ExpressRoute partner circuits are not eligible for the preview.
 
 ### Gateways
 
@@ -29,27 +30,54 @@ To configure FastPath, the virtual network gateway must be either:
 * Ultra Performance
 * ErGw3AZ
 
-#### <a name="aggthroughput"></a>Estimated performances by gateway SKU
-The following table shows the gateway types and the estimated performances. This table applies to both the Resource Manager and classic deployment models.
+## Limitations
 
-[!INCLUDE [expressroute-table-aggthroughput](../../includes/expressroute-table-aggtput-include.md)]
+While FastPath supports most configurations, it doesn't support the following features:
 
-> [!IMPORTANT]
-> Application performance depends on multiple factors, such as the end-to-end latency, and the number of traffic flows the application opens. The numbers in the table represent the upper limit that the application can theoretically achieve in an ideal environment.
->
->
+* UDR on the gateway subnet: FastPath doesn't honor UDRs configured on the gateway subnet. FastPath traffic bypasses any next-hops determined by UDRs configured on the gateway subnet.
 
-## Supported features
-
-While FastPath supports most configurations, it does not support the following features:
-
-* UDR on the gateway subnet: If you apply a UDR to the gateway subnet of your virtual network, the network traffic from your on-premises network will continue to be sent to the virtual network gateway.
-
-* VNet Peering: If you have other virtual networks peered with the one that is connected to ExpressRoute, the network traffic from your on-premises network to the other virtual networks (i.e. the so-called "Spoke" VNets) will continue to be sent to the virtual network gateway. The workaround is to connect all the virtual networks to the ExpressRoute circuit directly.
-
-* Basic Load Balancer: If you deploy a Basic internal load balancer in your virtual network or the Azure PaaS service you deploy in your virtual network uses a Basic internal load balancer, the network traffic from your on-premises network to the virtual IPs hosted on the Basic load balancer will be sent to the virtual network gateway. The solution is to upgrade the Basic load balancer to a [Standard load balancer](https://docs.microsoft.com/azure/load-balancer/load-balancer-overview).
+* Basic Load Balancer: If you deploy a Basic internal load balancer in your virtual network or the Azure PaaS service you deploy in your virtual network uses a Basic internal load balancer, the network traffic from your on-premises network to the virtual IPs hosted on the Basic load balancer will be sent to the virtual network gateway. The solution is to upgrade the Basic load balancer to a [Standard load balancer](../load-balancer/load-balancer-overview.md).
 
 * Private Link: If you connect to a [private endpoint](../private-link/private-link-overview.md) in your virtual network from your on-premises network, the connection will go through the virtual network gateway.
+
+## Public preview
+
+The following FastPath features are in Public preview:
+
+**VNet Peering** - FastPath will send traffic directly to any VM deployed in a virtual network peered to the one connected to ExpressRoute, bypassing the ExpressRoute virtual network gateway.
+
+**Private Link** - Private Link traffic sent over ExpressRoute FastPath will bypass the ExpressRoute virtual network gateway in the data path.
+This preview is available in the following Azure Regions.
+- Australia East
+- East Asia
+- East US
+- East US 2
+- North Central US
+- North Europe
+- South Central US
+- South East Asia
+- UK South
+- West Central US
+- West Europe
+- West US
+- West US 2
+- West US 3
+
+This preview supports connectivity to the following Azure Services:
+- Azure Cosmos DB
+- Azure Key Vault
+- Azure Storage
+- Third Party Private Link Services
+
+This preview is available for connections associated to ExpressRoute Direct circuits. Connections associated to ExpressRoute partner circuits are not eligible for this preview.
+
+> [!NOTE]
+> Private Link pricing will not apply to traffic sent over ExpressRoute FastPath during Public preview. For more information about pricing, check out the [Private Link pricing page](https://azure.microsoft.com/pricing/details/private-link/).
+> 
+
+See [How to enroll in ExpressRoute FastPath features](expressroute-howto-linkvnet-arm.md#enroll-in-expressroute-fastpath-features-preview).
+
+Available in all regions.
  
 ## Next steps
 

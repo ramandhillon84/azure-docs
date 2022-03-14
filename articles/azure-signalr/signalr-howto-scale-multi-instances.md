@@ -1,11 +1,13 @@
 ---
 title: Scale with multiple instances - Azure SignalR Service
 description: In many scaling scenarios, customer often needs to provision multiple instances and configure to use them together, to create a large-scale deployment. For example, sharding requires multiple instances support.
-author: sffamily
+author: vicancy
 ms.service: signalr
 ms.topic: conceptual
+ms.devlang: csharp
+ms.custom: devx-track-csharp
 ms.date: 03/27/2019
-ms.author: zhshang
+ms.author: lianwei
 ---
 # How to scale SignalR Service with multiple instances?
 The latest SignalR Service SDK supports multiple endpoints for SignalR Service instances. You can use this feature to scale the concurrent connections, or use it for cross-region messaging.
@@ -20,7 +22,7 @@ If the key starts with `Azure:SignalR:ConnectionString:`, it should be in format
 
 You can add multiple instance connection strings using the following `dotnet` commands:
 
-```batch
+```cmd
 dotnet user-secrets set Azure:SignalR:ConnectionString:east-region-a <ConnectionString1>
 dotnet user-secrets set Azure:SignalR:ConnectionString:east-region-b:primary <ConnectionString2>
 dotnet user-secrets set Azure:SignalR:ConnectionString:backup:secondary <ConnectionString3>

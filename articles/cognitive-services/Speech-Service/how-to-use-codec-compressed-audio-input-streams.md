@@ -1,65 +1,125 @@
 ---
-title: Stream codec compressed audio with the Speech SDK - Speech service
+title: Support compressed input audio with the Speech SDK - Speech service
 titleSuffix: Azure Cognitive Services
-description: Learn how to stream compressed audio to the Speech service with the Speech SDK. Available for C++, C#, and Java for Linux, Java in Android and Objective-C in iOS.
+description: Learn how to stream compressed audio to the Speech service with the Speech SDK. 
 services: cognitive-services
-author: amitkumarshukla
+author: eric-urban
+ms.author: eur
 manager: nitinme
 ms.service: cognitive-services
 ms.subservice: speech-service
-ms.topic: conceptual
-ms.date: 09/20/2019
-ms.author: amishu
+ms.topic: how-to
+ms.date: 01/13/2022
+ms.devlang: cpp, csharp, golang, java, python
+ms.custom: devx-track-csharp
+zone_pivot_groups: programming-languages-set-twenty-eight
 ---
 
-# Using codec compressed audio input with the Speech SDK
+# Support compressed input audio
 
-The Speech SDK's **Compressed Audio Input Stream** API provides a way to stream compressed audio to the Speech service using PullStream or PushStream.
+The Speech SDK and Speech CLI use GStreamer to support different kinds of input audio formats. GStreamer decompresses the audio before it's sent over the wire to the Speech service as raw PCM.
 
-> [!IMPORTANT]
-> Streaming compressed input audio is currently supported for C++, C#, and Java on Linux (Ubuntu 16.04, Ubuntu 18.04, Debian 9). It is also supported for [Java in Android](how-to-use-codec-compressed-audio-input-streams-android.md) and [Objective-C in iOS](how-to-use-codec-compressed-audio-input-streams-ios.md) platform.
-> Speech SDK version 1.7.0 or higher is required.
+[!INCLUDE [supported-audio-formats](includes/supported-audio-formats.md)]
 
-For wav/PCM see the mainline speech documentation.  Outside of wav/PCM, the following codec compressed input formats are supported:
+## Install GStreamer
 
-- MP3
-- OPUS/OGG
-- FLAC
-- ALAW in wav container
-- MULAW in wav container
+Choose a platform for installation instructions.
 
-## Prerequisites
+Platform | Languages | Supported GStreamer version
+| :--- | ---: | :---:
+Android  | Java | [1.18.3](https://gstreamer.freedesktop.org/data/pkg/android/1.18.3/)
+Linux  | C++, C#, Java, Python, Go | [Supported Linux distributions and target architectures](~/articles/cognitive-services/speech-service/speech-sdk.md)
+Windows (excluding UWP) | C++, C#, Java, Python | [1.18.3](https://gstreamer.freedesktop.org/data/pkg/windows/1.18.3/msvc/gstreamer-1.0-msvc-x86_64-1.18.3.msi)
 
-Handling compressed audio is implemented using [GStreamer](https://gstreamer.freedesktop.org). For licensing reason Gstreamer binaries are not compiled and linked with speech SDK. So application developer needs to install the following on 18.04, 16.04 and Debian 9 to use compressed input audio.
+### [Android](#tab/android)
+
+For more information about building libgstreamer_android.so, see [GStreamer configuration by programming language](#gstreamer-configuration).
+
+For more information, see [Android installation instructions](https://gstreamer.freedesktop.org/documentation/installing/for-android-development.html?gi-language=c).
+
+### [Linux](#tab/linux)
+
+For more information, see [Linux installation instructions](https://gstreamer.freedesktop.org/documentation/installing/on-linux.html?gi-language=c).  
 
 ```sh
-sudo apt install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
+sudo apt install libgstreamer1.0-0 \
+gstreamer1.0-plugins-base \
+gstreamer1.0-plugins-good \
+gstreamer1.0-plugins-bad \
+gstreamer1.0-plugins-ugly
 ```
+### [Windows](#tab/windows)
 
-## Example code using codec compressed audio input
+Make sure that packages of the same platform (x64 or x86) are installed. For example, if you installed the x64 package for Python, you need to install the x64 GStreamer package. The following instructions are for the x64 packages.
 
-To stream in a compressed audio format to the Speech service, create `PullAudioInputStream` or `PushAudioInputStream`. Then, create an `AudioConfig` from an instance of your stream class, specifying the compression format of the stream.
+1. Create the folder c:\gstreamer.
+1. Download the [installer](https://gstreamer.freedesktop.org/data/pkg/windows/1.18.3/msvc/gstreamer-1.0-msvc-x86_64-1.18.3.msi).
+1. Copy the installer to c:\gstreamer.
+1. Open PowerShell as an administrator.
+1. Run the following command in PowerShell:
 
-Let's assume that you have an input stream class called `myPushStream` and are using OPUS/OGG. Your code may look like this:
+    ```powershell
+    cd c:\gstreamer
+    msiexec /passive INSTALLLEVEL=1000 INSTALLDIR=C:\gstreamer /i gstreamer-1.0-msvc-x86_64-1.18.3.msi
+    ```
 
-```csharp
-using Microsoft.CognitiveServices.Speech;
-using Microsoft.CognitiveServices.Speech.Audio;
+1. Add the system variables GST_PLUGIN_PATH with the value C:\gstreamer\1.0\msvc_x86_64\lib\gstreamer-1.0.
+1. Add the system variables GSTREAMER_ROOT_X86_64 with the value C:\gstreamer\1.0\msvc_x86_64.
+1. Add another entry in the path variable as C:\gstreamer\1.0\msvc_x86_64\bin.
+1. Reboot the machine.
 
-var speechConfig = SpeechConfig.FromSubscription("YourSubscriptionKey", "YourServiceRegion");
+For more information about GStreamer, see [Windows installation instructions](https://gstreamer.freedesktop.org/documentation/installing/on-windows.html?gi-language=c).
 
-// Create an audio config specifying the compressed audio format and the instance of your input stream class.
-var audioFormat = AudioStreamFormat.GetCompressedFormat(AudioStreamContainerFormat.OGG_OPUS);
-var audioConfig = AudioConfig.FromStreamInput(myPushStream, audioFormat);
+***
 
-var recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+## GStreamer configuration
 
-var result = await recognizer.RecognizeOnceAsync();
+> [!NOTE]
+> GStreamer configuration requirements vary by programming language. For more information, choose your programming language at the top of this page. The contents of this section will be updated.
 
-var text = result.GetText();
-```
+::: zone pivot="programming-language-csharp"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/csharp/prerequisites.md)]
+::: zone-end
+
+::: zone pivot="programming-language-cpp"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/cpp/prerequisites.md)]
+::: zone-end
+
+::: zone pivot="programming-language-java"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/java/prerequisites.md)]
+::: zone-end
+
+::: zone pivot="programming-language-python"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/python/prerequisites.md)]
+::: zone-end
+
+::: zone pivot="programming-language-go"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/go/prerequisites.md)]
+::: zone-end
+
+## Example
+
+::: zone pivot="programming-language-csharp"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/csharp/examples.md)]
+::: zone-end
+
+::: zone pivot="programming-language-cpp"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/cpp/examples.md)]
+::: zone-end
+
+::: zone pivot="programming-language-java"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/java/examples.md)]
+::: zone-end
+
+::: zone pivot="programming-language-python"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/python/examples.md)]
+::: zone-end
+
+::: zone pivot="programming-language-go"
+[!INCLUDE [prerequisites](includes/how-to/compressed-audio-input/go/examples.md)]
+::: zone-end
 
 ## Next steps
 
-- [Get your Speech trial subscription](https://azure.microsoft.com/try/cognitive-services/)
-* [See how to recognize speech in Java](~/articles/cognitive-services/Speech-Service/quickstarts/speech-to-text-from-microphone.md?pivots=programming-language-java)
+> [!div class="nextstepaction"]
+> [Learn how to recognize speech](./get-started-speech-to-text.md)

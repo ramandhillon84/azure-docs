@@ -1,35 +1,35 @@
 ---
 title: SharePoint files - QnA Maker
-titleSuffix: Azure Cognitive Services
 description: Add secured SharePoint data sources to your knowledge base to enrich the knowledge base with questions and answers that may be secured with Active Directory.
-services: cognitive-services
-author: diberry
-manager: nitinme
 ms.service: cognitive-services
 ms.subservice: qna-maker
-ms.topic: conceptual
-ms.date: 06/24/2019
-ms.author: diberry
+ms.topic: how-to
+ms.date: 01/25/2022
 ---
 
 # Add a secured SharePoint data source to your knowledge base
 
-Add secured SharePoint data sources to your knowledge base to enrich the knowledge base with questions and answers that may be secured with Active Directory.
+Add secured cloud-based SharePoint data sources to your knowledge base to enrich the knowledge base with questions and answers that may be secured with Active Directory.
 
 When you add a secured SharePoint document to your knowledge base, as the QnA Maker manager, you must request Active Directory permission for QnA Maker. Once this permission is given from the Active Directory manager to QnA Maker for access to SharePoint, it doesn't have to be given again. Each subsequent document addition to the knowledge base will not need authorization if it is in the same SharePoint resource.
 
 If the QnA Maker knowledge base manager is not the Active Directory manager, you will need to communicate with the Active Directory manager to finish this process.
 
+## Prerequisites
+
+* Cloud-based SharePoint - QnA Maker uses Microsoft Graph for permissions. If your SharePoint is on-premises, you won't be able to extract from SharePoint because Microsoft Graph won't be able to determine permissions.
+* URL format - QnA Maker only supports SharePoint urls which are generated for sharing and are of format `https://\*.sharepoint.com`
+
 ## Add supported file types to knowledge base
 
-You can add all QnA Maker-supported [file types](../Concepts/content-types.md) from a SharePoint site to your knowledge base. You may have to grant [permissions](#permissions) if the file resource is secured.
+You can add all QnA Maker-supported [file types](../concepts/data-sources-and-content.md#file-and-url-data-types) from a SharePoint site to your knowledge base. You may have to grant [permissions](#permissions) if the file resource is secured.
 
 1. From the library with the SharePoint site, select the file's ellipsis menu, `...`.
 1. Copy the file's URL.
 
    ![Get the SharePoint file URL by selecting the file's ellipsis menu then copying the URL.](../media/add-sharepoint-datasources/get-sharepoint-file-url.png)
 
-1. In the QnA Maker portal, on the **Settings** page, [add the URL](edit-knowledge-base.md#add-datasource) to the knowledge base.
+1. In the QnA Maker portal, on the **Settings** page, add the URL to the knowledge base.
 
 ### Images with SharePoint files
 
@@ -47,7 +47,7 @@ When you test the QnA pair in the interactive test panel, in the QnA Maker porta
 
 ## Permissions
 
-Granting permissions happens when a secured file from a SharePoint server is added to a knowledge base. Depending on how the SharePoint is set up and the permissions of the person adding the file, this could require:
+Granting permissions happens when a secured file from a server running SharePoint is added to a knowledge base. Depending on how the SharePoint is set up and the permissions of the person adding the file, this could require:
 
 * no additional steps - the person adding the file has all the permissions needed.
 * steps by both [knowledge base manager](#knowledge-base-manager-add-sharepoint-data-source-in-qna-maker-portal) and [Active Directory manager](#active-directory-manager-grant-file-read-access-to-qna-maker).
@@ -84,7 +84,7 @@ The Active Directory manager will get a pop-up window requesting permissions to 
 
 ### Grant access from the App Registrations list
 
-1. The Active Directory manager signs in to the Azure portal and opens **[App registrations list](https://ms.portal.azure.com/#blade/Microsoft_AAD_IAM/ApplicationsListBlade)**.
+1. The Active Directory manager signs in to the Azure portal and opens **[App registrations list](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ApplicationsListBlade)**.
 
 1. Search for and select the **QnAMakerPortalSharePoint** app. Change the second filter box from **My apps** to **All apps**. The app information will open on the right side.
 
@@ -122,12 +122,16 @@ The Active Directory manager will get a pop-up window requesting permissions to 
 
 
 
-<!--
 
 ## Add SharePoint data source with APIs
 
-You need to get the SharePoint file's URI before adding it to QnA Maker.
+There is a workaround to add latest SharePoint content via API using Azure blob storage, below are the steps: 
+1.  Download the SharePoint files locally. The user calling the API needs to have access to SharePoint. 
+1.  Upload them on the Azure blob storage. This will create a secure shared access by [using SAS token.](../../../storage/common/storage-sas-overview.md#how-a-shared-access-signature-works) 
+1. Pass the blob URL generated with the SAS token to the QnA Maker API. To allow the Question Answers extraction from the files, you need to add the suffix file type as '&ext=pdf' or '&ext=doc' at the end of the URL before passing it to QnA Maker API.
 
+
+<!--
 ## Get SharePoint File URI
 
 Use the following steps to transform the SharePoint URL into a sharing token.
@@ -151,7 +155,7 @@ Use the following steps to transform the SharePoint URL into a sharing token.
 
 ### Add or update a SharePoint File URI to your knowledge base
 
-Use the **@microsoft.graph.downloadUrl** from the previous section as the `fileuri` in the QnA Maker API for [adding a knowledge base](https://go.microsoft.com/fwlink/?linkid=2092179) or [updating a knowledge base](https://docs.microsoft.com/rest/api/cognitiveservices/qnamaker/knowledgebase/update). The following fields are mandatory: name, fileuri, filename, source.
+Use the **@microsoft.graph.downloadUrl** from the previous section as the `fileuri` in the QnA Maker API for [adding a knowledge base](/rest/api/cognitiveservices/qnamaker4.0/knowledgebase) or [updating a knowledge base](/rest/api/cognitiveservices/qnamaker/knowledgebase/update). The following fields are mandatory: name, fileuri, filename, source.
 
 ```
 {
@@ -183,4 +187,4 @@ Use the **@microsoft.graph.downloadUrl** from the previous section as the `fileu
 ## Next steps
 
 > [!div class="nextstepaction"]
-> [Collaborate on your knowledge base](collaborate-knowledge-base.md)
+> [Collaborate on your knowledge base](../concepts/data-sources-and-content.md)

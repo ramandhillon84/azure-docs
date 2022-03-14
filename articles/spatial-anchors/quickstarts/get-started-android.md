@@ -1,19 +1,20 @@
 ---
 title: 'Quickstart: Create an Android app'
 description: In this quickstart, you learn how to build an Android app using Spatial Anchors.
-author: craigktreasure
-manager: vriveras
+author: pamistel
+manager: MehranAzimi-msft
 services: azure-spatial-anchors
-
-ms.author: crtreasu
-ms.date: 02/24/2019
+ms.author: pamistel
+ms.date: 11/20/2020
 ms.topic: quickstart
 ms.service: azure-spatial-anchors
+ms.custom: mode-api, devx-track-azurecli 
+ms.devlang: azurecli
 ---
 
-# Quickstart: Create an Android app with Azure Spatial Anchors
+# Run the sample app: Android - Android Studio (Java or C++/NDK)
 
-This quickstart covers how to create an Android app using [Azure Spatial Anchors](../overview.md) in either Java or C++/NDK. Azure Spatial Anchors is a cross-platform developer service that allows you to create mixed reality experiences using objects that persist their location across devices over time. When you're finished, you'll have an ARCore Android app that can save and recall a spatial anchor.
+This quickstart covers how to run the [Azure Spatial Anchors](../overview.md) sample app for Android devices using Android Studio (Java or C++/NDK). Azure Spatial Anchors is a cross-platform developer service that allows you to create mixed reality experiences using objects that persist their location across devices over time. When you're finished, you'll have an ARCore Android app that can save and recall a spatial anchor.
 
 You'll learn how to:
 
@@ -82,6 +83,8 @@ Locate the `SpatialAnchorsAccountKey` field and replace `Set me` with the accoun
 
 Locate the `SpatialAnchorsAccountId` field and replace `Set me` with the account identifier.
 
+Locate the `SpatialAnchorsAccountDomain` field and replace `Set me` with the account domain.
+
 # [NDK](#tab/openproject-ndk)
 
 Open `Android/NDK/app/src/main/cpp/AzureSpatialAnchorsApplication.cpp`.
@@ -89,6 +92,8 @@ Open `Android/NDK/app/src/main/cpp/AzureSpatialAnchorsApplication.cpp`.
 Locate the `SpatialAnchorsAccountKey` field and replace `Set me` with the account key.
 
 Locate the `SpatialAnchorsAccountId` field and replace `Set me` with the account identifier.
+
+Locate the `SpatialAnchorsAccountDomain` field and replace `Set me` with the account domain.
 
 ---
 
